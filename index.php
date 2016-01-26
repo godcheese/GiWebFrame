@@ -20,7 +20,7 @@
  require_once 'include/routerController.class.php';
  
  //抽象路由控制类,参数1 true为严格url模式
- $rC=new routerController(true)
+ $rC=new routerController(true);
  
  //调试输出当前访问页面链接
  var_dump($rC->getRequestUrl());
