@@ -24,6 +24,7 @@ $rC=new routerController(true);
 
 //调试输出当前访问页面链接
 var_dump($rC->getRequestUrl());
+echo '请访问 http://你的域名/?c=sample&m=home/ 测试！';
 
 //此处判断是否在首页home页
 if($rC->isHome){
