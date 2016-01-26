@@ -17,6 +17,9 @@
  *
  */
 
+//引用视图类
+require_once ROOT_PATH.'/include/viewHtml.class.php';
+
 class sample{
 
     //配置页面，c=initPage&m=$initArray 参数
@@ -24,11 +27,25 @@ class sample{
     {
         switch ($initArray){
             case 'home':
+                viewHtml::html_start('zh_CN');
+                viewHtml::head_start();
+                viewHtml::tag_format_output(0,array('tag'=>'meta',array('author'=>'godcheese','keywords'=>'gioov,gioov.com')));
+                viewHtml::head_end();
+                viewHtml::body_start();
                 echo 'home';
+                viewHtml::body_end();
+                viewHtml::html_end();
                 break;
 
             case 'error':
-                echo 'error 404';
+                viewHtml::html_start('zh_CN');
+                viewHtml::head_start();
+                viewHtml::tag_format_output(0,array('tag'=>'meta',array('author'=>'godcheese','keywords'=>'gioov,gioov.com')));
+                viewHtml::head_end();
+                viewHtml::body_start();
+                echo 'error';
+                viewHtml::body_end();
+                viewHtml::html_end();
                 break;
             default:
                 echo 'default';
