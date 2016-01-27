@@ -6,7 +6,7 @@
  * @website :   http://www.gioov.com
  * @github  :   https://github.com/godcheese
  * @link    :   https://github.com/godcheese/GiWebFrame.git
- * @copyriht    :   godcheese copyright all reserved.
+ * @copyright    :   godcheese copyright all reserved.
  * @date    :   2016.01
  *
  */
