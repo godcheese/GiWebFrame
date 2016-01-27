@@ -13,32 +13,24 @@
 
 //*******************************Main***************************************//
 
-//定义更目录
+//定义根目录
 defined('ROOT_PATH')?:define('ROOT_PATH',dirname(__FILE__));
 
-//引用路由控制类
+//引用路由控制器控制类
 require_once 'include/routerController.class.php';
 
-//抽象路由控制类,参数1 true为严格url模式
+//引用html视图代码输出类
+require_once 'include/htmlView.class.php';
+
+//抽象路由控制类
 $rC=new routerController(true);
 
-//调试输出当前访问页面链接
-var_dump($rC->getRequestUrl());
-echo '请访问 http://你的域名/?c=sample&m=home/ 测试！';
-
-//此处判断是否在首页home页
-if($rC->isHome){
-
-    //调用欲被访问的Controller以及方法，并输出
-    $res=callController($rC->getController(),array('initPage','home'));
-    echo $res;
-
+//判断是否在首页
+if($rC->isHome()){
+    $resContent=$rC->callController('page','home'); //指定 首页home页面
+    echo $resContent;
 }else{
-    //如若不是首页home页时，自动调用欲被访问的Controller及指定方法
-    $res->callController($rC->getController,array('initPage',$rC->getMethod()));
-    echo $res;
+    echo $rC->callController($rC->getController(),$rC->getMethod());
 }
-
-
 
 ?>
