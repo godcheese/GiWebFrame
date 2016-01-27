@@ -71,6 +71,29 @@ class page{
         htmlView::html_end();
     }
 
+    /**
+     * 自定义页面
+     */
+    public function about()
+    {
+        htmlView::print_l(htmlView::html_start(array('lang' => 'zh_CN', 'xmlns' => 'http://www.w3.org/1999/xhtml')));
+        htmlView::print_l(htmlView::head_start());
+        htmlView::print_l(htmlView::tag_format_output(0, array('tag' => 'meta', 'attr' => array('charset' => 'utf-8'))));
+
+        //标题 title
+        $page_title = '关于';
+        htmlView::print_l(htmlView::tag_format_output(1, array('tag' => 'title', 'attr' => '', 'content' => $page_title)));
+        htmlView::print_l(htmlView::head_end());
+
+        //输出 body
+        htmlView::print_l(htmlView::body_start(array('class' => 'body')));
+        $content = "首页 about：测试输出！";
+        htmlView::print_l(htmlView::tag_format_output(1, array('tag' => 'p', 'attr' => array('class' => 'container'), 'content' => $content)));
+        htmlView::print_l(htmlView::body_end());
+
+        htmlView::html_end();
+    }
+
 }
 
 ?>
