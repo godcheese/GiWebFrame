@@ -14,16 +14,20 @@
 /**
  * Class routerController
  * 路由控制器控制类
- * 
+ *
  */
 
+//定义根目录
 defined('ROOT_PATH')?:define('ROOT_PATH',dirname(dirname(__FILE__)));
 
 class routerController
 {
-    protected $strictUrl = true;//严格的url模式
-    protected $homeUrlArray = array('/', '/index.php');//数组型,在解析时将解析出数组元素的字符串长度 eg:array('/','/index.php')
+    //严格的url模式
+    protected $strictUrl = true;
+
+
     /*
+     * //数组型,在解析时将解析出数组元素的字符串长度 eg:array('/','/index.php')
      * 重写数组
      * $class->IndexUrlArray=array('egurl1','egurl2');
      * or
@@ -31,30 +35,45 @@ class routerController
      * $class->IndexUrlArray[]='egurl1';
      * $class->IndexUrlArray[]='egurl2';
      */
+    protected $homeUrlArray = array('/', '/index.php');
 
 
-    //初始化函数
+    /**
+     * 初始化类方法
+     * @param bool $strictUrl   严格url模式
+     * @param array $homeUrlArray   首页url数组
+     */
     function __construct($strictUrl = true, $homeUrlArray = array('/', '/index.php'))
     {
         $this->strictUrl = $strictUrl;
         $this->homeUrlArray = $homeUrlArray;
     }
 
-    //get ServerName eg:www.gioov.com
+    /**
+     * @return mixed
+     * get ServerName eg:www.gioov.com
+     */
     public static function getServerName()
     {
         $tmp_serverName = $_SERVER['SERVER_NAME'];
         return $tmp_serverName;
     }
 
-    //get RequestUrl eg:/,/index.php?a=aVal&d=dVal
+    /**
+     * @return mixed
+     * get RequestUrl eg:/,/index.php?a=aVal&d=dVal
+     */
     public static function getRequestUrl()
     {
         $tmp_requestUri = $_SERVER['REQUEST_URI'];
         return $tmp_requestUri;
     }
 
-    //计算主页url数组的元素字符串长度，再+1（这个1是"?"的长度，因为url后面跟参数时候需要加上?所以用?的位置来判断url是否符合规范）
+    /**
+     * @param null $HomeUrlArray
+     * @return array
+     * 计算主页url数组的元素字符串长度，再+1（这个1是"?"的长度，因为url后面跟参数时候需要加上?所以用?的位置来判断url是否符合规范）
+     */
     public function HomeUrlArrayStringLengthPlusOneArray($HomeUrlArray = null)
     {
         if ($HomeUrlArray == null) {
@@ -76,7 +95,12 @@ class routerController
         }
     }
 
-    //解析字符串 字符串长度，字符串所在位置
+    /**
+     * @param $parseType
+     * @param array $parseValue
+     * @return bool|int|string
+     * 解析字符串 字符串长度，字符串所在位置
+     */
     public static function parseString($parseType, $parseValue = array('strict'=>null))
     {
 
@@ -108,6 +132,10 @@ class routerController
 
     }
 
+    /**
+     * @return null|string
+     * GET C
+     */
     private function getC()
     {
 
@@ -158,11 +186,12 @@ class routerController
         }
     }
 
-    //GET Controller 值
+    /**
+     * @return null|string
+     * GET Controller 值
+     */
     public function getController()
     {
-        //GET C http://www.gioov.com/?c=controller
-        $tmp_requrl = $this->getRequestUrl();
 
         //判断是否为严格的url模式,非严格模式
         if ($this->strictUrl == false) {
@@ -175,6 +204,10 @@ class routerController
         }
     }
 
+    /**
+     * @return null|string
+     * GET M
+     */
     private function getM()
     {
         $tmp_m_array = array();
@@ -216,20 +249,24 @@ class routerController
 
     }
 
-    //GET Method 值
+    /**
+     * @return null|string
+     * GET Method 值
+     */
     public function getMethod()
     {
         if ($this->strictUrl == false) {
             $getMethod = isset($_GET['m']) ? $_GET['m'] : null;
             $getMethod = trim($getMethod); //将Method值去除左右空格
             return $getMethod;
-
         } else {
             return $this->getM();
         }
     }
 
-    // 判断当前是否为首页
+    /**
+     * @return bool 判断当前是否为首页
+     */
     public function isHome()
     {
         if (in_array($this->getRequestUrl(), $this->homeUrlArray)) {
@@ -237,46 +274,25 @@ class routerController
         }
     }
 
+    /**
+     * 系统输出的处理错误引用类及方法
+     */
     private function errorController(){
-        echo '错误的控制器！';
+        @include_once ROOT_PATH.'/include/system.controller.php';
+        @$sys=new system();
+        return @$sys->errorController();
     }
     private function errorMethod(){
-        echo '错误的方法！';
+        @include_once ROOT_PATH.'/include/system.controller.php';
+        @$sys=new system();
+        return @$sys->errorMethod();
     }
 
-    private function errorCustom($eType,$class=null){
-        switch ($eType){
-            case 'controller':
-                $controller='error404';
-                $con_file = ROOT_PATH . '/include/controller/' . $controller . '.controller.php';
-                if (file_exists($con_file)) {   //判断controller文件是否存在 绝对路径 root/controller/*.controller.php
-                    //404类文件存在时
-                    require_once $con_file;
-                    $class = new $controller;
-                    if(class_exists($class,false)){
-                        //类存在时候
-                        if(method_exists($controller,'error404')){
-                            //方法存在时
-                            $resContent=call_user_func(array($class,'error404'));
-                            return $resContent;
-                        }else{$this->errorMethod();}
-                    }else{$this->errorController();}
 
-                }else{$this->errorController();}
-                break;
-            case 'method':
-                if(method_exists($class,'error')){
-                    $resContent = call_user_func(array($class, 'error'));
-                    return $resContent;
-                }else{$this->errorMethod();}
-                break;
-
-
-        }
-
-    }
-
-    //将数组格式化成字符串输出 p1,p2,p3
+    /**
+     * @param array $tmp_a 将数组格式化成字符串输出 p1,p2,p3
+     * @return string
+     */
     private function format_output_array_parameter($tmp_a=array())
     {
 
@@ -288,71 +304,108 @@ class routerController
         return $tmp_vv;
     }
 
-    //给出$controller,和$method(数组)，前面已经设定默认值
-    public function callController($controller=null, $method=array())
+    /**
+     * @return mixed|void 自定义错误
+     */
+    private function errorCustom()
     {
-        if ($controller == null) {
-            /**
-             * $controller 为空时
-             */
-            return $this->errorCustom('controller');
-
-
-        } else {
-            /**
-             * $controller 不为空时
-             */
-            $con_file = ROOT_PATH . '/include/controller/' . $controller . '.controller.php';
-            var_dump($con_file);
-            if (file_exists($con_file)) {
-                //类文件存在时
-
-                //引用类文件
-                require_once $con_file;
+        $controller = 'error';
+        $con_file = ROOT_PATH . '/include/controller/' . $controller . '.controller.php';
+        if (file_exists($con_file)) {
+            require_once $con_file;
+            if(class_exists($controller,false)){
                 $class = new $controller;
-                //类文件存在时
-                if (class_exists($controller,false)) {
-                    //$controller 类存在时
-                    if ($method[0] != null) {
-                        //$method 不为空时
-                        if (method_exists($class, $method[0])) {
-                            if (count($method) >= 2 && !in_array(null,$method)) {
-                                //所访问的方法有参数时
-                                $tmp_array = array_slice($method, 1);  //从第二个元素起读取（除去方法元素）
-                                $resContent = call_user_func(array($class, $method[0]), $this->format_output_array_parameter($tmp_array));
-                                return $resContent;
-                            }else{
-                                //所访问的方法无参数时
-                                $resContent = call_user_func(array($class, $method[0]));
-                                return $resContent;
-                            }
+                if(method_exists($class,'error404')){
+                    //存在error404方法
+                    $resContent=call_user_func(array($class,'error404'));
+                    return $resContent;
+                }else{
+                    //不能存在error404方法,调用系统自带的error
+                    return $this->errorMethod();
+                }
 
-                        } else {
-                            //指定要访问的方法不存在时
-                            $this->errorCustom('method',$class);}
-
-                    } else {
-                        //未指定要访问的方法时
-                       return $this->errorCustom('method',$class);}
-
-                } else {
-
-                    //$controller 类不存在时
-                    return $this->errorCustom('controller');}
-            } else {
-                //类文件不存在时
-                var_dump('ddd');
-                return $this->errorCustom('controller');
+            }else{
+                //用户自定义的error类不存在时，调用系统自带的error
+                return $this->errorController();
             }
         }
-
     }
+
+
+    /**
+     * @param null $controller
+     * @param null $method
+     * 给出$controller,和$method(数组)，前面已经设定默认值
+     */
+    public function callController($controller=null, $method=null)
+    {
+        if ($controller == null) {
+            //$controller 为空时
+            $resContent=$this->errorCustom();
+            echo $resContent;
+        } else {
+            //$controller 不为空时
+            $con_file = ROOT_PATH . '/include/controller/' . $controller . '.controller.php';
+
+            if(file_exists($con_file)){
+
+                //controller文件存在时
+                require_once $con_file;
+
+                if(class_exists($controller,false)){
+                    //$controller 类存在时
+                    $class= new $controller;
+
+                    if($method!=null){
+                        //$method 不为空时
+
+                        if(method_exists($class,$method)){
+                            //$method 存在时
+                            $resContent=call_user_func(array($class,$method));
+                            echo $resContent;
+
+                        }else{
+                            //$method 不存在时
+
+                            if(method_exists($class,'init')){
+                                $resContent=call_user_func(array($class,'init'));
+                                echo $resContent;
+                            }else {
+                                echo $this->errorCustom();
+
+                            }
+                        }
+
+                    }else{
+                        //$method 为空时
+
+                        if(method_exists($class,'init')){
+                            $resContent=call_user_func(array($class,'init'));
+                            echo $resContent;
+                        }else {
+                            echo $this->errorCustom();
+
+                        }
+
+                    }
+
+                }else{
+                    //$controller 类不存在时
+                    echo $this->errorCustom();
+                }
+
+            }else{
+                //controller文件不存在时
+                echo $this->errorCustom();
+            }
+
+        }
+    }
+
 
 
     //销毁函数
-    function __destruct()
-    {
-    }
+    function __destruct(){}
 
 
 }
