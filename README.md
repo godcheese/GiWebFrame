@@ -3,4 +3,4 @@
 
 
 ### 请访问 http://你的域名/?c=page&m=home/ 测试！
-### 请访问 http://你的域名/?c=page&m=about/ 测试！
+### 请访问 http://你的域名/?c=page&m=view&page=about 测试！
