@@ -17,12 +17,12 @@
 defined('ROOT_PATH')?:define('ROOT_PATH',dirname(__FILE__));
 
 //引用路由控制器控制类
-require_once 'include/controller.class.php';
+require_once ROOT_PATH.'/include/controller.class.php';
 
 //引用html视图代码输出类
-//require_once 'include/view.class.php';
+//require_once ROOT_PATH.'/include/view.class.php';
 
-//抽象路由控制类
+//控制器控制类
 $controller=new controller(false);
 
 //判断是否在首页
