@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @project :   GiWebFrame
- * @version :   v1.0 alpha
+ * @version :   v1.1 alpha
  * @author  :   godcheese
  * @website :   http://www.gioov.com
  * @github  :   https://github.com/godcheese
@@ -17,7 +18,7 @@
  *
  */
 
-class htmlView
+class view
 {
     /**
      * @param string $str 标签末换行输出
