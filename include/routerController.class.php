@@ -1,7 +1,7 @@
 <?php
 /**
  * @project :   GiWebFrame
- * @version :   v1.0 alpha
+ * @version :   v1.1 alpha
  * @author  :   godcheese
  * @website :   http://www.gioov.com
  * @github  :   https://github.com/godcheese
@@ -12,7 +12,7 @@
  */
 
 /**
- * Class routerController
+ * Class getController
  * 路由控制器控制类
  *
  */
@@ -20,7 +20,7 @@
 //定义根目录
 defined('ROOT_PATH')?:define('ROOT_PATH',dirname(dirname(__FILE__)));
 
-class routerController
+class controller
 {
     //严格的url模式
     protected $strictUrl = true;
@@ -136,6 +136,12 @@ class routerController
      * @return null|string
      * GET C
      */
+
+    private function trimGET($str){
+        $str=trim($str);
+        return $str;
+    }
+
     private function getC()
     {
 
@@ -165,7 +171,7 @@ class routerController
 
             if (in_array($this->parseString('position', $parseValue) + 1, $tmp_p_array)) {
                 $getC = isset($_GET['c']) ? $_GET['c'] : null;
-                $getC = trim($getC); //将C值去除左右空格
+                $getC = $this->trimGET($getC); //将C值去除左右空格
                 return $getC;
             }
 
@@ -179,7 +185,7 @@ class routerController
 
             if (in_array($this->parseString('position', $parseValue) + 1, $tmp_p_array)) {
                 $getC = isset($_GET['C']) ? $_GET['C'] : null;
-                $getC = trim($getC); //将C值去除左右空格
+                $getC = $this->trimGET($getC); //将C值去除左右空格
                 return $getC;
             }
 
@@ -196,7 +202,7 @@ class routerController
         //判断是否为严格的url模式,非严格模式
         if ($this->strictUrl == false) {
             $getC = isset($_GET['c']) ? $_GET['c'] : null;
-            $getC = trim($getC); //将C值去除左右空格
+            $getC = $this->trimGET($getC); //将C值去除左右空格
             return $getC;
 
         } else {
@@ -227,7 +233,7 @@ class routerController
         //读取m的位置数值是否在区间内
         if (in_array($this->parseString('position', $parseValue), $tmp_m_array)) {
             $getM = isset($_GET['m']) ? $_GET['m'] : null;
-            $getM = trim($getM); //将C值去除左右空格
+            $getM = $this->trimGET($getM); //将C值去除左右空格
             return $getM;
         }
 
@@ -243,7 +249,7 @@ class routerController
         //读取M的位置数值是否在区间内
         if (in_array($this->parseString('position', $parseValue), $tmp_m_array)) {
             $getM = isset($_GET['M']) ? $_GET['M'] : null;
-            $getM = trim($getM); //将M值去除左右空格
+            $getM =  $this->trimGET($getM); //将M值去除左右空格
             return $getM;
         }
 
@@ -257,7 +263,7 @@ class routerController
     {
         if ($this->strictUrl == false) {
             $getMethod = isset($_GET['m']) ? $_GET['m'] : null;
-            $getMethod = trim($getMethod); //将Method值去除左右空格
+            $getMethod =  $this->trimGET($getMethod); //将Method值去除左右空格
             return $getMethod;
         } else {
             return $this->getM();
@@ -269,7 +275,15 @@ class routerController
      */
     public function isHome()
     {
-        if (in_array($this->getRequestUrl(), $this->homeUrlArray)) {
+
+        /**
+         * if (in_array($this->getRequestUrl(), $this->homeUrlArray)) {
+         *      return true;
+         *  }
+         *
+         */
+
+        if($this->getC() ==null & $this->getM()==null){
             return true;
         }
     }
@@ -278,12 +292,12 @@ class routerController
      * 系统输出的处理错误引用类及方法
      */
     private function errorController(){
-        @include_once ROOT_PATH.'/include/system.controller.php';
+        @include_once ROOT_PATH . '/include/system.controller.php';
         @$sys=new system();
         return @$sys->errorController();
     }
     private function errorMethod(){
-        @include_once ROOT_PATH.'/include/system.controller.php';
+        @include_once ROOT_PATH . '/include/system.controller.php';
         @$sys=new system();
         return @$sys->errorMethod();
     }
