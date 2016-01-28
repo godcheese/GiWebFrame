@@ -12,8 +12,8 @@
  */
 
 /**
- * Class getController
- * 路由控制器控制类
+ * Class controller
+ * 控制制器控制类
  *
  */
 
