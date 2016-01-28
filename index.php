@@ -1,7 +1,7 @@
 <?php
 /**
  * @project :   GiWebFrame
- * @version :   v1.0 alpha
+ * @version :   v1.1 alpha
  * @author  :   godcheese
  * @website :   http://www.gioov.com
  * @github  :   https://github.com/godcheese
@@ -17,20 +17,20 @@
 defined('ROOT_PATH')?:define('ROOT_PATH',dirname(__FILE__));
 
 //引用路由控制器控制类
-require_once 'include/routerController.class.php';
+require_once 'include/controller.class.php';
 
 //引用html视图代码输出类
-require_once 'include/htmlView.class.php';
+//require_once 'include/view.class.php';
 
 //抽象路由控制类
-$rC=new routerController(true);
+$controller=new controller(false);
 
 //判断是否在首页
-if($rC->isHome()){
-    $resContent=$rC->callController('page','home'); //指定 首页home页面
+if($controller->isHome()){
+    $resContent=$controller->callController('page','home'); //指定 首页home页面
     echo $resContent;
 }else{
-    echo $rC->callController($rC->getController(),$rC->getMethod());
+    echo $controller->callController($controller->getController(),$controller->getMethod());
 }
 
 ?>
