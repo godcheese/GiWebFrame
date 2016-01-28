@@ -16,13 +16,13 @@
 //定义根目录
 defined('ROOT_PATH')?:define('ROOT_PATH',dirname(__FILE__));
 
-//引用路由控制器控制类
+//引用控制器控制类
 require_once ROOT_PATH.'/include/controller.class.php';
 
 //引用html视图代码输出类
 //require_once ROOT_PATH.'/include/view.class.php';
 
-//控制器控制类
+//抽象控制器控制类
 $controller=new controller(false);
 
 //判断是否在首页
