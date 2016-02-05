@@ -1,7 +1,7 @@
 <?php
 /**
  * @project :   GiWebFrame
- * @version :   v1.1 alpha
+ * @version :   v1.2 alpha
  * @author  :   godcheese
  * @website :   http://www.gioov.com
  * @github  :   https://github.com/godcheese
