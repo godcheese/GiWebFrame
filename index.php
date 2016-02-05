@@ -7,30 +7,33 @@
  * @github  :   https://github.com/godcheese
  * @link    :   https://github.com/godcheese/GiWebFrame.git
  * @copyright    :   godcheese copyright all reserved.
- * @date    :   2016.01
+ * @date    :   2016.02
  *
  */
 
-//*******************************Main***************************************//
 
-//定义根目录
-defined('ROOT_PATH')?:define('ROOT_PATH',dirname(__FILE__));
+/**
+ * Php file index
+ *
+ */
 
-//引用控制器控制类
-require_once ROOT_PATH.'/include/controller.class.php';
+header('Content-Type:text/html;charset=utf-8');
+defined('ROOT_PATH') or define('ROOT_PATH',dirname(__FILE__));
 
-//引用html视图代码输出类
-//require_once ROOT_PATH.'/include/view.class.php';
+require_once ROOT_PATH.'/util/init.class.php';
 
-//抽象控制器控制类
-$controller=new controller(false);
+use GiWebFrame\Util\Init as GiInit;
 
-//判断是否在首页
-if($controller->isHome()){
-    $resContent=$controller->callController('page','home'); //指定 首页home页面
-    echo $resContent;
+//
+$home=GiInit::isHome(GiInit::homeUrlArray());
+
+
+if($home){
+    GiInit::handLoadControllerAndMethod('index','page',array('view'=>'home'));
+
 }else{
-    echo $controller->callController($controller->getController(),$controller->getMethod());
+    GiInit::autoLoadControllerAndMethod(GiInit::homeUrlArray());
 }
 
 ?>
+
