@@ -8,8 +8,10 @@ define('AROOT',dirname(__FILE__));  //web根路径
 require_once AROOT.DS.'loader.php';
 
 //运行网站
-//\GiWebFrame\Core\App::run();
+\GiWebFrame\Core\App::run();
 
+
+/**
 $mysql= new \GiWebFrame\Lib\MysqlPdo();
 
 
@@ -29,3 +31,5 @@ var_dump($mysql->fetchColumn());
 
 $stmt="insert";
 //print_r($mysql->exec($stmt));
+ *
+ * */

@@ -7,8 +7,8 @@ require_once AROOT.DS.'config.inc.php';
 require_once AROOT.DS.'include'.DS.'Core'.DS.'App.inc.php';           // 核心配置文件
 require_once AROOT.DS.'include'.DS.'Core'.DS.'App.class.php';       // 核心脚本库
 require_once AROOT.DS.'include'.DS.'Core'.DS.'Controller.class.php';       // 核心视图库
-require_once AROOT.DS.'include'.DS.'Core'.DS.'Inf'.DS.'Controller.Inf.php';  // controller接口
-require_once AROOT.DS.'include'.DS.'Core'.DS.'Inf'.DS.'ErrorController.Inf.php';  // 错误controller接口
+require_once AROOT.DS.'include'.DS.'Core'.DS.'inf'.DS.'Controller.inf.php';  // Controller接口
+require_once AROOT.DS.'include'.DS.'Core'.DS.'inf'.DS.'ErrorController.inf.php';  // 错误Controller接口
 
 require_once AROOT.DS.'include'.DS.'functions.php';  //公用函数库
 
