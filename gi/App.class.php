@@ -145,7 +145,7 @@ class App{
      * @note 自动载入所请求的controller和method
      */
     public static function autoLoad($homeUrlArray=array()){
-        if(c('system')['url_rewrite']) {
+        if(c('system')['url_rewrite_on']) {
             if(self::urlRewrite_isPath($homeUrlArray)) {
                 $c = self::urlRewrite_getRequest($homeUrlArray,'1');
                 $m = self::urlRewrite_getRequest($homeUrlArray,'2');
@@ -254,9 +254,8 @@ class App{
      */
     public static function isHome($homeUrlArray=array())
     {
-
-
-        if(c('system')['url_rewrite']) {
+        
+        if(c('system')['url_rewrite_on']) {
             if (self::urlRewrite_isPath($homeUrlArray)) {
 
                 if(self::urlRewrite_getRequest($homeUrlArray,'1')==null){
@@ -360,7 +359,7 @@ class App{
         $view2 = self::getSubmitRequestQueryValue($requestType, $urlViewKey);//非url rewrite下获取view参数值
 
         //URL REWRITE 判断
-        if (c('system')['url_rewrite']) {
+        if (c('system')['url_rewrite_on']) {
             $view = $view1 != null ? $view1 : $view2;
         } else {
             $view = $view2 != null ? $view2 : $view2;

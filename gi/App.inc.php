@@ -10,7 +10,7 @@ $GLOBALS['giconfig']['system']=array(
         'app_projectpage'=>'http://github.com/godcheese/giwebframe.git'),
     
     'debug'=>'off',         //调试状态，用于开发者开发调试用（原生显示，数据库非）
-    'url_rewrite'=>true,    //网站伪静态虚拟路径
+    'url_rewrite_on'=>true,    //网站伪静态虚拟路径
     'timezone'=>'rpc',      //时区
     
     'home_controller'=>array('c'=>'index','m'=>'home'),   //指定首页入口的controller 和method
