@@ -1,0 +1,71 @@
+{<include file="~header"/>}
+<meta name="keywords" content="{$var[page_keywords]}" />
+<meta name="description" content="{$var[page_description]}" />
+<title>{$page[title]}</title>
+</head>
+<body>
+{<include file="~nav_main"/>}
+<div class="bs-docs-header" id="content" tabindex="-1">
+    <div class="container">
+        <h1>{$page[title]}</h1>
+        <p>{$page[bread]}</p>
+    </div>
+</div>
+<div class="container bs-docs-container">
+
+    <div class="row">
+        <div class="col-md-9" role="main">
+            <div class="bs-docs-section">
+               {$page[content]}
+                </div>
+            </div>
+
+        <div class="col-md-3">
+            <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix-top">
+                <ul class="nav bs-docs-sidenav">
+
+                    <li class="">
+                        <a href="#download">测试分类1</a>
+                    </li>
+                    <li class="">
+                        <a href="#whats-included">测试分类2</a>
+                        <ul class="nav">
+                            <li class=""><a href="#whats-included-precompiled">测试子分类1</a></li>
+                            <li class=""><a href="#whats-included-source">测试子分类2</a></li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类3</a>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类4</a>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类5</a>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类6</a>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类7</a>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类8</a>
+                    </li>
+                    <li class="">
+                        <a href="#download">测试分类9</a>
+                    </li>
+
+                </ul>
+                <a class="back-to-top" href="#top">
+                    返回顶部
+                </a>
+
+            </nav>
+        </div>
+        </div>
+    </div>
+
+
+
+{<include file="~footer"/>}
