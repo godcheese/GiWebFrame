@@ -1,5 +1,0 @@
-<Ifmodule mode_rewrite.c>
-RewriteCond %{REQUEST_FILENAME}!-d
-RewriteCond %{REQUEST_FILENAME}!-f
-RewriteCond ^(.*)$index.php/$1 [QSA,PT,L]
-</Ifmodule>
