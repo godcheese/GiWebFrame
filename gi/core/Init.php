@@ -13,10 +13,205 @@ class Init{
         }
     }
 
+    public static function initController($controller){
 
-    // 自动加载类
+
+        // 实例化controller之前先判断是否为空
+        if ($controller != '') {
+            $pos=strpos($controller,c('default_controller_layer'));
+            $str1=strlen($controller);
+            $str2=strlen(c('default_controller_layer'));
+
+            if($pos!=$str1-$str2){
+                $controller.=c('default_controller_layer');
+            }
+
+
+
+            if(class_exists($controller)) {
+                $obj = new $controller;
+                return $obj;
+            }
+        }
+    }
+
+    public static function handLoad($controller=''){
+        $c = $controller;
+        if($c==''){
+            return;
+        }
+
+        $obj =  self::loadController($c);
+        if (is_object($obj)) {
+
+            $m = Route::getRequest(c('default_method_request_key'));
+            if ($m != '') {
+
+                if(method_exists($obj,$m)) {
+                    call_user_func(array($obj, $m));
+                }else{
+                    self::loadError('method');
+                }
+            }else{
+                self::loadDefaultMethod($obj);
+            }
+
+        }else{
+            self::loadError('controller');
+        }
+    }
+
+    public static function autoLoad(){
+        $url_model=c('url_model');
+
+        switch ($url_model){
+
+            case URL_COMMON:
+                Route::getRequest(c('default_controller_request'),$controller);
+                $controller=self::loadController($controller);
+                if(is_object($controller)){
+                    Route::getRequest(c('default_method_request'),$method);
+                    self::loadMethod($controller,$method);
+                }else{
+                    self::loadError('controller');
+                }
+
+                break;
+
+            case URL_PATHINFO:
+
+                $pathinfo = Route::getControllerMethodPathinfo();
+
+                
+                if(Route::getRequest(c('default_controller_request'),$controller)){
+
+                }else{
+                    $controller=$pathinfo['c'];
+                }
+
+
+
+                $controller=self::loadController($controller);
+                if(is_object($controller)){
+
+                    if(Route::getRequest(c('default_method_request'),$method)){
+
+                    }else{
+                        $method=$pathinfo['m'];
+                    }
+
+                    self::loadMethod($controller,$method);
+                }else{
+                    self::loadError('controller');
+
+                }
+                break;
+
+            case URL_REWRITE:
+                $pathinfo = Route::getControllerMethodPathinfo();
+                if(Route::getRequest(c('default_controller_request'),$c)){
+
+                }else{
+                    $c=$pathinfo['c'];
+                }
+
+                $controller=self::loadController($c);
+                if(is_object($controller)){
+
+                    if(Route::getRequest(c('default_method_request'),$method)){
+
+                    }else{
+                        $method=$pathinfo['m'];
+                    }
+
+                    self::loadMethod($controller,$method);
+                }else{
+                    self::loadError('controller');
+
+                }
+                break;
+
+
+        }
+
+    }
+
+
+    public static function loadMethod($object,$method){
+        if(is_object($object)){
+            if($method!=''){
+                if(method_exists($object,$method)) {
+                    call_user_func(array($object, $method));
+
+                }else{
+                    self::loadError('method');
+                }
+            }else{
+                self::loadDefaultMethod($object);
+            }
+        }
+    }
+
+    public static function loadError($type){
+        $type=strtolower($type);
+
+        // 实例化报错controller class
+        $error_obj=self::initController(c('default_error_controller'));
+
+        $error_obj_method=c('default_error_method');
+
+        $error_obj_controller_method=$error_obj_method['controller_method'];
+        $error_obj_method_method=$error_obj_method['method_method'];
+
+        // 以上两个方法在error object内找不到的话就使用一下两个默认报错信息
+        $error_obj_controller_msg=$error_obj_method['controller_msg'];
+        $error_obj_method_msg=$error_obj_method['method_msg'];
+
+
+
+
+        switch ($type){
+
+            case 'controller':
+
+                if(is_object($error_obj)){
+                    if(method_exists($error_obj,$error_obj_controller_method)){
+
+                    }else{
+                        echo $error_obj_controller_msg;
+                    }
+
+                }else{
+                    echo $error_obj_controller_msg;
+                }
+
+                break;
+            case 'method':
+
+                if(is_object($error_obj)){
+                    if(method_exists($error_obj,$error_obj_method_method)){
+
+                    }else{
+                        echo $error_obj_method_msg;
+                    }
+
+                }else{
+                    echo $error_obj_method_msg;
+                }
+
+                break;
+
+            default:
+                exit();
+                break;
+
+
+        }
+    }
+
+
+    // 自动加载类 供gi.php内的 spl_autoload_register 调用
     public static function loadClass($class_name){
-
 
         if($class_name!=''){
             if(strpos($class_name,'\\')){
@@ -41,190 +236,31 @@ class Init{
 
     }
 
-
-    // 初始化controller类
-    public static function initController($controller_name = ''){
-
-        // 判断controller是否为空
-        if($controller_name == '') {
-
-            //为空时自动调用默认controller
-            Route::getRequest(c('default_controller_request'), $controller_name);
-        }
-
-        // 实例化controller之前先判断是否为空
-        if ($controller_name != '') {
-
-            if(class_exists($controller_name))
-                return new $controller_name;
-
-        }
-    }
-
-    // 加载错误的提示
-    public static function errorMessage($error_type){
-
-        $error_type=strtolower($error_type);
-        switch ($error_type){
-            case 'controller':
-                $obj=self::initController(c('default_error_msg_controller')); //读取配置中设定的值
-                if(is_object($obj)){
-                    $error_method=c('default_error_msg_method');
-                    if(method_exists($obj,$error_method['controller_method']))
-                        call_user_func(array($obj, $error_method['controller_method']));
-                }else{
-                    $error_method=c('default_error_msg_method');
-                    echo $error_method['controller_msg'];
-
-                }
-                break;
-
-            case 'method':
-                $obj=self::initController(c('default_error_msg_controller')); //读取配置中设定的值
-                if(is_object($obj)){
-                    $error_method=c('default_error_msg_method');
-                    if(method_exists($obj,$error_method['method_method']))
-                        call_user_func(array($obj, $error_method['method_method']));
-                }else{
-                    $error_method=c('default_error_msg_method');
-                    echo $error_method['method_msg'];
-
-                }
-                break;
-
-
-        }
-
-    }
-
     /**
      * @description 加载controller类
      * @param $c
      * @return mixed
      */
-    public static function loadController($c){
+    public static function loadController($controller=''){
 
-        if($c!=''){
-            $obj = self::initController($c.c('default_controller_layer'));
-            if (is_object($obj)) {
-                return $obj;
-            }else{
-                self::errorMessage('controller');
-            }
+
+        // 判断controller是否为空
+        if($controller == '') {
+
+            //为空时自动调用默认controller
+            Route::getRequest(c('default_controller_request'), $controller);
+
         }
+
+        return self::initController($controller);
 
     }
 
-    public static function loadMethod($obj,$m){
-        if($obj!=''){
-            if($m!=''){
-                if(method_exists($obj,$m)) {
-                    call_user_func(array($obj, $m));
-                }else{
-                    self::errorMessage('method');
-                }
-            }else{
-                self::loadDefaultMethod($obj);
-            }
-        }
-    }
 
-    public static function autoLoad(){
-
-        switch (c('url_model')){
-            case URL_COMMON:
-                Route::getRequest(c('default_controller_request'),$c);
-                $controller=self::loadController($c);
-                if(is_object($controller)){
-                    Route::getRequest(c('default_method_request'),$m);
-                    self::loadMethod($controller,$m);
-                }
-
-                break;
-
-
-            case URL_PATHINFO:
-                $pathinfo = Route::getControllerMethodPathinfo();
-
-                if(Route::getRequest(c('default_controller_request'),$c)){
-
-                }else{
-                    $c=$pathinfo['c'];
-                }
-
-                $controller=self::loadController($c);
-                if(is_object($controller)){
-
-                    if(Route::getRequest(c('default_method_request'),$m)){
-
-                    }else{
-                        $m=$pathinfo['m'];
-                    }
-
-                    self::loadMethod($controller,$m);
-                }
-
-                break;
-
-            case URL_REWRITE:
-                $pathinfo = Route::getControllerMethodPathinfo();
-                if(Route::getRequest(c('default_controller_request'),$c)){
-
-                }else{
-                    $c=$pathinfo['c'];
-                }
-
-                $controller=self::loadController($c);
-                if(is_object($controller)){
-
-                    if(Route::getRequest(c('default_method_request'),$m)){
-
-                    }else{
-                        $m=$pathinfo['m'];
-                    }
-
-                    self::loadMethod($controller,$m);
-                }
-                break;
-
-
-        }
-
-
-
-
-    }
-
-    public static function handLoad($controller_name,$method_name=''){
-
-        $c = $controller_name;
-        if($c==''){
-            return;
-        }
-
-        $obj =  self::initController($c);
-        if (is_object($obj)) {
-
-            $m = Route::getRequest(c('default_method_request_key'));
-            if ($m != '') {
-
-                if(method_exists($obj,$m)) {
-                    call_user_func(array($obj, $m));
-                }else{
-                    self::errorMessage('method');
-                }
-            }else{
-                self::loadDefaultMethod($obj);
-            }
-
-        }else{
-            self::errorMessage('controller');
-        }
-
-    }
-
+    // 载入默认方法__main
     public static function loadDefaultMethod($obj)
     {
+
         if (method_exists($obj, c('default_method'))) {
             call_user_func(array($obj, c('default_method')));
         }else{

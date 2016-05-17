@@ -39,6 +39,10 @@ class Controller{
 
         $this->Smarty->setTemplateDir(c('template_root_path').$this->template_dir.DS);
         $this->Smarty->setCompileDir(CONTENT_PATH.$this->template_compile_dir.DS);
+        
+        $tpl=str_replace('\\','/',DS.basename(dirname(c('template_root_path'))).DS.basename(c('template_root_path')).DS.$this->template_dir);
+        $this->assign('__TPL__',$tpl);
+        
 
     }
 

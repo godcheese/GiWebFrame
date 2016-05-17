@@ -29,8 +29,8 @@ return array(
     'default_method'        =>  '__main', // 默认操作名称
 
     // 错误controller时报错的方法 ， 错误method报错的方法
-    'default_error_msg_controller'      =>  'errorController',    //错误信息默认处理controller类
-    'default_error_msg_method'          =>  array(
+    'default_error_controller'      =>  'errorController',    //错误信息默认处理controller类
+    'default_error_method'          =>  array(
         'controller_method'=>'errorController','controller_msg'=>'错误的控制器！', // 控制器（controller）的报错方法及报错信息
         'method_method'=>'errorMethod','method_msg'=>'错误的方法！'   //方法（method）的报错方法及报错信息
     ),

@@ -5,6 +5,9 @@ namespace gi\core;
 class Route
 {
 
+    public static $c='';
+    public static $m='';
+
     /**
      * @description 当前是否访问的是自己本身
      * @return bool
@@ -14,7 +17,7 @@ class Route
         $uri = Route::requestUri();
         $p_uri=parse_url($uri);
 
-        if (($uri == '/' || trim(CURRENT_RUN,'/')==trim($p_uri['path'],'/')) || ltrim($uri, c('url_pathinfo_delimiter')) == basename(CURRENT_RUN) && self::getUriQuery() == '') {
+        if ($uri == '/' || (trim(CURRENT_RUN,'/')==trim($p_uri['path'],'/') && self::getUriQuery() == '') ) {
             return true;
 
         }
@@ -151,7 +154,7 @@ class Route
     public static function getControllerMethodPathinfo()
     {
         $path = self::getUriPath();
-
+        
         if ($path != '') {
             if (c('url_model') != URL_REWRITE) {
                 $path = array_slice($path, 1);
@@ -217,7 +220,7 @@ class Route
                     if (count($path) >= 2) {
                         $path = array_slice($path, 2);
                     }else{
-                        
+
                     }
 
                     if ($path != null || isset($path[$query_position])) {

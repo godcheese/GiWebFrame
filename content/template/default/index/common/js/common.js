@@ -1,5 +1,5 @@
 
-document.write("<script src='/content/common/js/functions.js'></script>");
+document.write("<script src='/js/functions.js'></script>");
 
 //主导航点亮 id=nav_main
 window.onload=function() {

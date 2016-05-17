@@ -6,11 +6,11 @@ class errorController{
     }
 
    public function errorController(){
-        echo '错误ee的控制器丫丫丫~';
+        echo '错误的控制器丫丫丫~';
     }
 
     public function errorMethod(){
-        echo '错误DD的方法丫丫丫~';
+        echo '错误的方法丫丫丫~';
     }
     
 }

@@ -8,7 +8,7 @@ define('GI_VERSION', '1.2.0');
 const URL_COMMON        =   0;  //普通模式 用参数
 const URL_PATHINFO      =   1;  //PATHINFO模式
 const URL_REWRITE       =   2;  //REWRITE模式
-const URL_COMPAT        =   3;  // 兼容模式
+//const URL_COMPAT        =   3;  // 兼容模式
 
 
 defined('DS') or define('DS', DIRECTORY_SEPARATOR); //// 定义系统路径分割符
