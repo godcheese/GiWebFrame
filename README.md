@@ -8,9 +8,6 @@
 #### or
 #### http://你的域名/index/home 测试！
 
-## http://www.gioov.com MyBlog.
-
-
 
 目录和文件命名
 
